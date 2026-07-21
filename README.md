@@ -1,50 +1,65 @@
-# YTSO BT Kontrol ve İzleme Sistemi
+# YTSO BT Kontrol, İzleme ve Erken Uyarı Sistemi
 
-Yalova Ticaret ve Sanayi Odasının bilgi teknolojileri kontrollerini, risklerini, dokümanlarını, envanterini ve uygunsuzluk kayıtlarını tek noktadan izlemek amacıyla hazırlanan web uygulamasıdır.
+## V0.2 — Early Warning Core
 
-## V0.1 kapsamı
+Yalova Ticaret ve Sanayi Odası bilgi teknolojileri kontrollerini, risklerini, dokümanlarını, lisanslarını, bakımlarını ve uygunsuzluklarını tek merkezden izlemek için hazırlanmış Vercel uyumlu Next.js uygulamasıdır.
 
-- Genel yönetim ekranı
-- Günlük ve haftalık kontrol listeleri
-- Kontrol sonucundan otomatik uygunsuzluk oluşturma
-- Doküman listesi
-- Risk listesi ve risk puanları
-- Uygunsuzluk kapatma işlemi
-- BT envanteri
-- Denetim özeti
-- Tarayıcı tabanlı yerel veri saklama
-- Vercel uyumlu Next.js yapı
+### Aktif sistem sorumluları
+
+- Necat Rüzgar
+- Gökhan Ergül
+
+### V0.2 kapsamı
+
+- Yönetim paneli
+- Erken Uyarı Merkezi
+- Günlük, haftalık ve aylık çevrim içi kontroller
+- Son 12 aylık günlük, haftalık, aylık, altı aylık ve yıllık ön kayıt arşivi
+- Lisans bitiş ve yenileme takibi
+- Son bakım ve sonraki bakım tarihi takibi
+- Risk ve uygunsuzluk görünümü
+- Doküman merkezi
+- Denetim görünümü
+
+## Önemli veri notu
+
+Geçmiş dönem kontrol kayıtları hızlı başlangıç amacıyla **Taslak Ön Kayıt** durumunda üretilmiştir. Bu kayıtlar gerçek yapılmış faaliyet kanıtı sayılmaz. Denetimde kullanılmadan önce kurum logları, servis formları, görev kayıtları veya Necat Rüzgar / Gökhan Ergül teyidi ile doğrulanmalıdır.
 
 ## Kurulum
 
-```bash
+```powershell
 npm install
 npm run dev
 ```
 
-Ardından `http://localhost:3000` adresini açın.
+Üretim kontrolü:
 
-## Vercel yayını
+```powershell
+npm run build
+```
 
-1. Bu klasörü GitHub deposuna gönderin.
-2. Vercel hesabında **Add New Project** seçeneğini açın.
-3. GitHub deposunu seçin.
-4. Framework ayarı otomatik olarak Next.js seçilir.
-5. **Deploy** düğmesine basın.
+## GitHub güncelleme
 
-V0.1 sürümü harici veritabanı gerektirmez. Kayıtlar kullanıcının tarayıcısında saklanır. Bu nedenle aynı veriler farklı cihazlar arasında paylaşılmaz.
+```powershell
+git add .
+git commit -m "V0.2 early warning, license and maintenance tracking"
+git push origin main
+```
 
-## V0.2 planı
+Vercel, GitHub push sonrasında otomatik olarak yeni sürümü yayınlar.
 
-- PostgreSQL veritabanı
-- Kullanıcı girişi ve rol bazlı yetkilendirme
-- Kurumsal dokümanların içerik ve revizyon yönetimi
-- Kontrol kanıtı ve dosya yükleme
-- Periyodik görev üretimi
-- E-posta bildirimleri
-- Denetçi için salt okunur kullanıcı hesabı
-- PDF ve Excel raporları
+## Sonraki sürüm
 
-## Güvenlik notu
+V0.3 kapsamında PostgreSQL veritabanı, gerçek giriş/rol yönetimi, kayıt doğrulama akışı, dosya kanıtları ve e-posta bildirimleri planlanmıştır.
 
-Gerçek parola, bağlantı bilgisi, IP adresi veya gizli kurum verisi kaynak kod içine yazılmamalıdır. Ortam değişkenleri `.env.local` ve Vercel Project Settings üzerinden yönetilmelidir.
+
+## V0.3 - Kritik Yazılım, Lisans ve Yenileme Takibi
+
+Gerçek YTSO yazılım envanteri eklendi: Trend Micro Worry-Free Services, Veeam VDP Essentials VUL, Komspot, KLOG 5651 ve Sophos XG 135 Xstream Protection. Lisans tarihleri kullanıcı tarafından doğrulanana kadar `Tarih Bekleniyor` durumundadır; sistemde sahte tarih üretilmez.
+
+## V0.4 - Doküman Erişimi ve Yönetim KPI Paneli
+
+- Dokümanlar görüntülenebilir ve Markdown olarak indirilebilir.
+- Her doküman için ayrı detay sayfası oluşturuldu.
+- Dashboard'a Denetim Hazırlık Skoru eklendi.
+- Kontrol, doküman, risk, bakım, lisans ve kanıt doğrulama KPI'ları eklendi.
