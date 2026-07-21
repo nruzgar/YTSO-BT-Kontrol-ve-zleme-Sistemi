@@ -1,11 +1,17 @@
-import Badge from "@/components/Badge";
-import { initialMaintenances } from "@/lib/seed";
+"use client";
 
-export default function MaintenancePage() {
-  return <>
-    <div className="page-heading"><div><span className="eyebrow">Bakım Yönetimi</span><h2>Periyodik bakım takvimi</h2></div><button className="primary">Yeni bakım</button></div>
-    <section className="panel"><div className="table-wrap"><table><thead><tr><th>Varlık</th><th>Bakım Türü</th><th>Son Bakım</th><th>Sonraki Bakım</th><th>Sorumlu</th><th>Tedarikçi</th><th>Durum</th></tr></thead><tbody>
-      {initialMaintenances.map((item) => <tr key={item.id}><td><strong>{item.assetCode}</strong><br/>{item.assetName}</td><td>{item.maintenanceType}</td><td>{item.lastMaintenanceDate}</td><td><strong>{item.nextMaintenanceDate}</strong></td><td>{item.responsible}</td><td>{item.supplier}</td><td><Badge tone={item.status === "Planlı" ? "success" : item.status === "Gecikmiş" ? "danger" : "warning"}>{item.status}</Badge></td></tr>)}
-    </tbody></table></div></section>
-  </>;
-}
+import { useEffect, useState } from "react";
+import Badge from "@/components/Badge";
+import { initialMaintenances, systemUsers } from "@/lib/seed";
+import { getActiveUser, canEdit } from "@/lib/session";
+import { readStorage, writeStorage } from "@/lib/storage";
+import type { MaintenanceItem } from "@/lib/types";
+
+const KEY="ytso-btys-maintenance";
+const empty:MaintenanceItem={id:"",assetCode:"",assetName:"",maintenanceType:"",responsible:"Necat Rüzgar",lastMaintenanceDate:"",nextMaintenanceDate:"",status:"Planlı",supplier:"",note:""};
+export default function MaintenancePage(){const[items,setItems]=useState(initialMaintenances);const[editing,setEditing]=useState<MaintenanceItem|null>(null);const[editable,setEditable]=useState(true);
+useEffect(()=>{setItems(readStorage(KEY,initialMaintenances));setEditable(canEdit(getActiveUser().role));const f=()=>setEditable(canEdit(getActiveUser().role));window.addEventListener("ytso-user-changed",f);return()=>window.removeEventListener("ytso-user-changed",f)},[]);
+function save(){if(!editing?.assetName.trim())return;const item={...editing,id:editing.id||`mnt-${Date.now()}`};const next=items.some(x=>x.id===item.id)?items.map(x=>x.id===item.id?item:x):[...items,item];setItems(next);writeStorage(KEY,next);setEditing(null)}
+return <><div className="page-heading"><div><span className="eyebrow">Bakım Yönetimi</span><h2>Periyodik bakım takvimi</h2></div><button className="primary" disabled={!editable} onClick={()=>setEditing(empty)}>Yeni bakım</button></div><section className="panel"><div className="table-wrap"><table><thead><tr><th>Varlık</th><th>Bakım Türü</th><th>Son Bakım</th><th>Sonraki Bakım</th><th>Sorumlu</th><th>Tedarikçi</th><th>Durum</th><th>İşlem</th></tr></thead><tbody>{items.map(item=><tr key={item.id}><td><strong>{item.assetCode}</strong><br/>{item.assetName}</td><td>{item.maintenanceType}</td><td>{item.lastMaintenanceDate||"—"}</td><td><strong>{item.nextMaintenanceDate||"—"}</strong></td><td>{item.responsible}</td><td>{item.supplier}</td><td><Badge tone={item.status==="Planlı"?"success":item.status==="Gecikmiş"?"danger":"warning"}>{item.status}</Badge></td><td><button className="link-button" disabled={!editable} onClick={()=>setEditing(item)}>Düzenle</button></td></tr>)}</tbody></table></div></section>
+{editing&&<div className="modal-backdrop"><div className="modal-card"><div className="modal-head"><h3>{editing.id?"Bakımı düzenle":"Yeni bakım"}</h3><button onClick={()=>setEditing(null)}>×</button></div><div className="form-grid"><label>Varlık kodu<input value={editing.assetCode} onChange={e=>setEditing({...editing,assetCode:e.target.value})}/></label><label>Varlık adı<input value={editing.assetName} onChange={e=>setEditing({...editing,assetName:e.target.value})}/></label><label className="span-2">Bakım türü<input value={editing.maintenanceType} onChange={e=>setEditing({...editing,maintenanceType:e.target.value})}/></label><label>Son bakım<input type="date" value={editing.lastMaintenanceDate} onChange={e=>setEditing({...editing,lastMaintenanceDate:e.target.value})}/></label><label>Sonraki bakım<input type="date" value={editing.nextMaintenanceDate} onChange={e=>setEditing({...editing,nextMaintenanceDate:e.target.value})}/></label><label>Sorumlu<select value={editing.responsible} onChange={e=>setEditing({...editing,responsible:e.target.value})}>{systemUsers.map(u=><option key={u.id}>{u.name}</option>)}</select></label><label>Durum<select value={editing.status} onChange={e=>setEditing({...editing,status:e.target.value as MaintenanceItem["status"]})}><option>Planlı</option><option>Yaklaşıyor</option><option>Gecikmiş</option></select></label><label className="span-2">Tedarikçi<input value={editing.supplier} onChange={e=>setEditing({...editing,supplier:e.target.value})}/></label><label className="span-2">Not<textarea value={editing.note||""} onChange={e=>setEditing({...editing,note:e.target.value})}/></label></div><div className="modal-actions"><button onClick={()=>setEditing(null)}>Vazgeç</button><button className="primary" onClick={save}>Kaydet</button></div></div></div>}
+</>}

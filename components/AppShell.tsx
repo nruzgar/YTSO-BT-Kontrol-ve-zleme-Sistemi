@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import UserSession from "./UserSession";
 
 const nav = [
   ["/", "Genel Görünüm"],
@@ -16,6 +17,7 @@ const nav = [
   ["/yazilimlar", "Yazılımlar"],
   ["/lisanslar", "Lisanslar"],
   ["/bakimlar", "Bakımlar"],
+  ["/kullanicilar", "Kullanıcılar ve Roller"],
   ["/denetim", "Denetim Görünümü"]
 ] as const;
 
@@ -46,10 +48,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <span className="eyebrow">Yalova Ticaret ve Sanayi Odası</span>
             <h1>BT Kontrol, İzleme ve Erken Uyarı Sistemi</h1>
           </div>
-          <div className="responsible-group">
-            <span>Necat Rüzgar</span>
-            <span>Gökhan Ergül</span>
-          </div>
+          <UserSession />
         </header>
         <section className="content">{children}</section>
       </main>

@@ -63,3 +63,13 @@ Gerçek YTSO yazılım envanteri eklendi: Trend Micro Worry-Free Services, Veeam
 - Her doküman için ayrı detay sayfası oluşturuldu.
 - Dashboard'a Denetim Hazırlık Skoru eklendi.
 - Kontrol, doküman, risk, bakım, lisans ve kanıt doğrulama KPI'ları eklendi.
+
+## V0.5 - Editable Operations
+
+- Doküman revizyonu, sorumlu, onaylayan ve gözden geçirme tarihi düzenlenebilir.
+- Lisans bitiş/yenileme tarihi, uyarı eşiği, tedarikçi ve sorumlu düzenlenebilir.
+- Bakım son/sonraki tarihleri, durum, tedarikçi ve sorumlu düzenlenebilir.
+- Kullanıcı ve rol yönetimi eklendi.
+- Aktif kullanıcı üst menüden değiştirilebilir.
+- Denetçi rolü salt görüntüleme yetkisine sahiptir.
+- Veriler V0.5'te tarayıcı localStorage alanında saklanır. Gerçek çok kullanıcılı kullanım için PostgreSQL ve kimlik doğrulama V0.6 kapsamındadır.

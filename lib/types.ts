@@ -2,11 +2,12 @@ export type ControlStatus = "pending" | "completed" | "overdue";
 export type FindingStatus = "open" | "in_progress" | "closed";
 export type VerificationStatus = "Taslak Ön Kayıt" | "Kurumca Doğrulandı";
 export type AlertLevel = "Bilgi" | "Dikkat" | "Uyarı" | "Kritik";
+export type UserRole = "Sistem Sorumlusu" | "Yönetici" | "Denetçi";
 
 export interface UserItem {
   id: string;
   name: string;
-  role: "Sistem Sorumlusu" | "Yönetici" | "Denetçi";
+  role: UserRole;
   active: boolean;
 }
 
@@ -60,6 +61,9 @@ export interface DocumentItem {
   status: "Yürürlükte" | "Taslak";
   owner: string;
   reviewDate: string;
+  revisionDate?: string;
+  approvedBy?: string;
+  note?: string;
 }
 
 export interface LicenseItem {
@@ -97,6 +101,7 @@ export interface MaintenanceItem {
   nextMaintenanceDate: string;
   status: "Planlı" | "Yaklaşıyor" | "Gecikmiş";
   supplier: string;
+  note?: string;
 }
 
 export interface AlertItem {

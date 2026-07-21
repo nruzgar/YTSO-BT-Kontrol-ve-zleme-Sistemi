@@ -1,0 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Badge from "@/components/Badge";
+import { systemUsers } from "@/lib/seed";
+import { readStorage, writeStorage } from "@/lib/storage";
+import type { UserItem, UserRole } from "@/lib/types";
+
+const KEY="ytso-btys-users";
+const empty:UserItem={id:"",name:"",role:"Denetçi",active:true};
+export default function UsersPage(){const[items,setItems]=useState(systemUsers);const[editing,setEditing]=useState<UserItem|null>(null);useEffect(()=>setItems(readStorage(KEY,systemUsers)),[]);
+function save(){if(!editing?.name.trim())return;const item={...editing,id:editing.id||`usr-${Date.now()}`};const next=items.some(x=>x.id===item.id)?items.map(x=>x.id===item.id?item:x):[...items,item];setItems(next);writeStorage(KEY,next);setEditing(null)}
+return <><div className="page-heading"><div><span className="eyebrow">Kullanıcı Yönetimi</span><h2>Kullanıcılar ve roller</h2><p>Bu sürümde kullanıcı seçimi yereldir; gerçek parola ve oturum yönetimi veritabanı sürümünde eklenecektir.</p></div><button className="primary" onClick={()=>setEditing(empty)}>Yeni kullanıcı</button></div><section className="panel"><div className="table-wrap"><table><thead><tr><th>Ad Soyad</th><th>Rol</th><th>Durum</th><th>Yetki</th><th>İşlem</th></tr></thead><tbody>{items.map(u=><tr key={u.id}><td><strong>{u.name}</strong></td><td>{u.role}</td><td><Badge tone={u.active?"success":"warning"}>{u.active?"Aktif":"Pasif"}</Badge></td><td>{u.role==="Denetçi"?"Görüntüleme":"Görüntüleme ve düzenleme"}</td><td><button className="link-button" onClick={()=>setEditing(u)}>Düzenle</button></td></tr>)}</tbody></table></div></section>{editing&&<div className="modal-backdrop"><div className="modal-card"><div className="modal-head"><h3>{editing.id?"Kullanıcıyı düzenle":"Yeni kullanıcı"}</h3><button onClick={()=>setEditing(null)}>×</button></div><div className="form-grid"><label className="span-2">Ad Soyad<input value={editing.name} onChange={e=>setEditing({...editing,name:e.target.value})}/></label><label>Rol<select value={editing.role} onChange={e=>setEditing({...editing,role:e.target.value as UserRole})}><option>Sistem Sorumlusu</option><option>Yönetici</option><option>Denetçi</option></select></label><label>Durum<select value={editing.active?"Aktif":"Pasif"} onChange={e=>setEditing({...editing,active:e.target.value==="Aktif"})}><option>Aktif</option><option>Pasif</option></select></label></div><div className="modal-actions"><button onClick={()=>setEditing(null)}>Vazgeç</button><button className="primary" onClick={save}>Kaydet</button></div></div></div>}</>}
