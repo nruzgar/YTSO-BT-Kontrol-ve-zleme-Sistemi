@@ -1,22 +1,11 @@
-{
-  "name": "ytso-bt-kontrol-izleme-sistemi",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {
-    "@types/node": "^26.1.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "typescript": "7.0.2"
-  }
+"dependencies": {
+  "next": "16.2.10",
+  "react": "latest",
+  "react-dom": "latest"
+},
+"devDependencies": {
+  "@types/node": "^24.0.0",
+  "@types/react": "^19.0.0",
+  "@types/react-dom": "^19.0.0",
+  "typescript": "5.9.3"
 }
